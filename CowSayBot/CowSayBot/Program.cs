@@ -35,11 +35,19 @@ namespace CowSayBot
         /// </summary>
         private static ManualResetEvent exitEvent = new ManualResetEvent( false );
 
+        /// <summary>
+        /// Signals to watch for to terminate teh program.
+        /// </summary>
         private static readonly UnixSignal[] signalsToWatch = new UnixSignal[] {
             new UnixSignal( Signum.SIGTERM ), // Termination Signal
             new UnixSignal( Signum.SIGINT )   // Interrupt from the keyboard
         };
 
+        /// <summary>
+        /// Main method
+        /// </summary>
+        /// <param name="args">The command-line arguments.</param>
+        /// <returns>The exit code that is given to the operating system after the program ends.</returns>
         public static int Main( string[] args )
         {
             if( File.Exists( cowsayProgram ) == false )
@@ -65,7 +73,7 @@ namespace CowSayBot
             IrcConfig config = new IrcConfig();
             config.Nick = nick;
             config.Server = "irc.freenode.net";
-            config.Channel = "#testcow";
+            config.Channel = "#ritlug";
             config.RealName = "Cow Say Bot";
             config.UserName = nick;
 
@@ -145,16 +153,16 @@ namespace CowSayBot
                 }
                 else
                 {
-                    Console.WriteLine( "Saw unknown line:" + response.Message );
+                    Console.Error.WriteLine( "Saw unknown line:" + response.Message );
                 }
             }
             catch( Exception e )
             {
-                Console.WriteLine( "*********************" );
-                Console.WriteLine( "Caught Exception:" );
-                Console.WriteLine( e.Message );
-                Console.WriteLine( e.StackTrace );
-                Console.WriteLine( "**********************" );
+                Console.Error.WriteLine( "*********************" );
+                Console.Error.WriteLine( "Caught Exception:" );
+                Console.Error.WriteLine( e.Message );
+                Console.Error.WriteLine( e.StackTrace );
+                Console.Error.WriteLine( "**********************" );
             }
         }
     }
