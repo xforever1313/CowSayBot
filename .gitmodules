@@ -1,0 +1,3 @@
+[submodule "GenericIrcBot"]
+	path = GenericIrcBot
+	url = git@github.com:xforever1313/GenericIrcBot.git
