@@ -18,12 +18,20 @@ namespace CowSayBot
 {
     class MainClass
     {
+        // -------- Fields --------
+
         private const string nick = "CowSayBot";
 
         /// <summary>
         /// Regex to look for while in IRC.
         /// </summary>
-        private const string cowsayRegex = @"!cowsay\s+(?<cowsayMsg>.+)";
+        private const string cowsayRegex = 
+            @"!(?<cmd>(" +
+            defaultCommand + ")|(" +
+            tuxCommand + @")|(" +
+            vaderCommand + @")|(" +
+            mooseCommand + @")|(" +
+            lionCommand + @"))\s+(?<cowsayMsg>.+)";
 
         /// <summary>
         /// Path to the cowsay binary.
@@ -38,10 +46,58 @@ namespace CowSayBot
         /// <summary>
         /// Signals to watch for to terminate teh program.
         /// </summary>
-        private static readonly UnixSignal[] signalsToWatch = new UnixSignal[] {
+        private static readonly UnixSignal[] signalsToWatch = {
             new UnixSignal( Signum.SIGTERM ), // Termination Signal
             new UnixSignal( Signum.SIGINT )   // Interrupt from the keyboard
         };
+
+        /// <summary>
+        /// Process Start info
+        /// </summary>
+        private static readonly ProcessStartInfo cowSayInfo;
+
+        // ---- Commands ----
+
+        /// <summary>
+        /// Command the user uses to use the default cow.
+        /// </summary>
+        private const string defaultCommand = "cowsay";
+
+        /// <summary>
+        /// Command user uses to have tux appear.
+        /// </summary>
+        private const string tuxCommand = "tuxsay";
+
+        /// <summary>
+        /// Command user uses to have vader appear.
+        /// </summary>
+        private const string vaderCommand = "vadersay";
+
+        /// <summary>
+        /// Command user uses to have a moose appear.
+        /// </summary>
+        private const string mooseCommand = "moosesay";
+
+        /// <summary>
+        /// Command user uses to have a lion appear.
+        /// </summary>
+        private const string lionCommand = "lionsay";
+
+        // -------- Constructor --------
+
+        /// <summary>
+        /// Static Constructor.
+        /// </summary>
+        static MainClass()
+        {
+            cowSayInfo = new ProcessStartInfo();
+            cowSayInfo.RedirectStandardInput = true;
+            cowSayInfo.RedirectStandardOutput = true;
+            cowSayInfo.UseShellExecute = false;
+            cowSayInfo.FileName = cowsayProgram;
+        }
+
+        // -------- Functions --------
 
         /// <summary>
         /// Main method
@@ -73,7 +129,7 @@ namespace CowSayBot
             IrcConfig config = new IrcConfig();
             config.Nick = nick;
             config.Server = "irc.freenode.net";
-            config.Channel = "#ritlug";
+            config.Channel = "#testcow";
             config.RealName = "Cow Say Bot";
             config.UserName = nick;
 
@@ -119,14 +175,10 @@ namespace CowSayBot
                     string messageToCowsay = cowMatch.Groups["cowsayMsg"].Value;
 
                     // Run the cowsay subprocess.
-                    ProcessStartInfo startInfo = new ProcessStartInfo();
-                    startInfo.RedirectStandardInput = true;
-                    startInfo.RedirectStandardOutput = true;
-                    startInfo.UseShellExecute = false;
-                    startInfo.FileName = cowsayProgram;
+                    cowSayInfo.Arguments = GetArguments( cowMatch.Groups["cmd"].Value );
 
                     string cowSayedMessage = string.Empty;
-                    using( Process cowsayProc = Process.Start( startInfo ) )
+                    using( Process cowsayProc = Process.Start( cowSayInfo ) )
                     {
                         using( StreamReader stdout = cowsayProc.StandardOutput )
                         {
@@ -163,6 +215,35 @@ namespace CowSayBot
                 Console.Error.WriteLine( e.Message );
                 Console.Error.WriteLine( e.StackTrace );
                 Console.Error.WriteLine( "**********************" );
+            }
+        }
+
+        /// <summary>
+        /// Gets the arguments based on the command the user gave us.
+        /// </summary>
+        /// <param name="commandString">The command string the user gave.  e.g. !tuxsay</param>
+        /// <returns>The arguments.</returns>
+        private static string GetArguments( string commandString )
+        {
+            switch( commandString )
+            {
+                case defaultCommand:
+                    return string.Empty;
+
+                case tuxCommand:
+                    return "-f tux";
+
+                case vaderCommand:
+                    return "-f vader";
+
+                case mooseCommand:
+                    return "-f moose";
+
+                case lionCommand:
+                    return "-f moofasa";
+
+                default:
+                    return string.Empty;
             }
         }
     }
