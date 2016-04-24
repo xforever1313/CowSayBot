@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericIrcBot", "..\Generic
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SethCSMono", "..\GenericIrcBot\SethCS\SethCS\SethCSMono.shproj", "{9406B11B-3C52-4266-91F6-B6C176593B01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CowSayBotPlugin", "CowSayBotPlugin\CowSayBotPlugin.csproj", "{F716EA25-E0E6-4A22-829F-3A459584E263}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -21,5 +23,9 @@ Global
 		{A8B04589-1FD1-4EB2-B855-7E8C6803CE7F}.Debug|x86.Build.0 = Debug|x86
 		{A8B04589-1FD1-4EB2-B855-7E8C6803CE7F}.Release|x86.ActiveCfg = Release|x86
 		{A8B04589-1FD1-4EB2-B855-7E8C6803CE7F}.Release|x86.Build.0 = Release|x86
+		{F716EA25-E0E6-4A22-829F-3A459584E263}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F716EA25-E0E6-4A22-829F-3A459584E263}.Debug|x86.Build.0 = Debug|Any CPU
+		{F716EA25-E0E6-4A22-829F-3A459584E263}.Release|x86.ActiveCfg = Release|Any CPU
+		{F716EA25-E0E6-4A22-829F-3A459584E263}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
